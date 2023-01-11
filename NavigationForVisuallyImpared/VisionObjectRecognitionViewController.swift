@@ -87,6 +87,9 @@ class VisionObjectRecognitionViewController: ViewController {
             // It is a CGRect.
             let objectBounds = VNImageRectForNormalizedRect(objectObservation.boundingBox, Int(bufferSize.width), Int(bufferSize.height))
             
+            
+            
+            
             let shapeLayer = self.createRoundedRectLayerWithBounds(objectBounds)
             
             let textLayer = self.createTextSubLayerInBounds(objectBounds,
@@ -165,7 +168,7 @@ class VisionObjectRecognitionViewController: ViewController {
         
         // Format the string
         let font = UIFont.systemFont(ofSize: 30)
-        var colour = UIColor.black
+        let colour = Constants.TextColours.light
         
         // Place the labels
         let labelHeight: CGFloat = 40.0
@@ -190,33 +193,106 @@ class VisionObjectRecognitionViewController: ViewController {
         textLayer.setAffineTransform(CGAffineTransform(rotationAngle: CGFloat(0)).scaledBy(x: 1.0, y: -1.0))
         return textLayer
     }
+    
     func createRoundedRectLayerWithBounds(_ bounds: CGRect) -> CALayer {
         let shapeLayer = CALayer()
         shapeLayer.bounds = bounds
         shapeLayer.position = CGPoint(x: bounds.midX, y: bounds.midY)
         shapeLayer.name = "Found Object"
-        shapeLayer.backgroundColor = CGColor(colorSpace: CGColorSpaceCreateDeviceRGB(), components: [1.0, 1.0, 0.2, 0.4])
+//        shapeLayer.backgroundColor = CGColor(colorSpace: CGColorSpaceCreateDeviceRGB(), components: [1.0, 1.0, 0.2, 0.4])
+        shapeLayer.borderWidth = 6
+        shapeLayer.borderColor = CGColor(red: 33, green: 255, blue: 0, alpha: 1)
         shapeLayer.cornerRadius = 7
+        
+//        if label == "traffic_light_red" || label == "stop sign" {
+//            shapeLayer.borderColor = CGColor(red: 0, green: 0, blue: 0, alpha: 1)
+//            shapeLayer.borderWidth = 12.0
+//        }
+//        else if label == "traffic_light_green" {
+//            boxLayer.borderColor = Constants.BoxColours.trafficGreen
+//            boxLayer.borderWidth = 10.0
+//        }
+//        else if label == "traffic_light_na" {
+//            boxLayer.borderColor = Constants.BoxColours.trafficNa
+//            boxLayer.borderWidth = 10.0
+//        }
+//        else if label == "person" || label == "bicycle" {
+//            boxLayer.borderColor = Constants.BoxColours.pedestrian
+//            boxLayer.borderWidth = 10.0
+//        }
+//
+//        else {
+//            boxLayer.borderColor = Constants.BoxColours.misc
+//        }
+        
         return shapeLayer
     }
+    
+//    func createTextSubLayerInBounds(_ bounds: CGRect, identifier: String, confidence: VNConfidence) -> CATextLayer {
+//        let textLayer = CATextLayer()
+//        textLayer.name = "Object Label"
+//
+//        let formattedString = NSMutableAttributedString(string: String(format: "\(identifier)\nConfidence:  %.2f", confidence))
+//        let largeFont = UIFont(name: "Helvetica", size: 24.0)!
+//        formattedString.addAttributes([NSAttributedString.Key.font: largeFont], range: NSRange(location: 0, length: identifier.count))
+//        textLayer.string = formattedString
+//        textLayer.bounds = CGRect(x: 0, y: 0, width: bounds.size.height - 10, height: bounds.size.width - 10)
+//        textLayer.position = CGPoint(x: bounds.midX, y: bounds.midY)
+//        textLayer.shadowOpacity = 0.7
+//        textLayer.shadowOffset = CGSize(width: 2, height: 2)
+//        textLayer.foregroundColor = CGColor(colorSpace: CGColorSpaceCreateDeviceRGB(), components: [0.0, 0.0, 0.0, 1.0])
+//        textLayer.contentsScale = 2.0 // retina rendering
+//        // rotate the layer into screen orientation and scale and mirror
+//        textLayer.setAffineTransform(CGAffineTransform(rotationAngle: CGFloat(.pi / 2.0)).scaledBy(x: 1.0, y: -1.0))
+//        return textLayer
+//    }
     
     func createTextSubLayerInBounds(_ bounds: CGRect, identifier: String, confidence: VNConfidence) -> CATextLayer {
         let textLayer = CATextLayer()
         textLayer.name = "Object Label"
-        let formattedString = NSMutableAttributedString(string: String(format: "\(identifier)\nConfidence:  %.2f", confidence))
-        let largeFont = UIFont(name: "Helvetica", size: 24.0)!
-        formattedString.addAttributes([NSAttributedString.Key.font: largeFont], range: NSRange(location: 0, length: identifier.count))
+        
+        // Format the string
+        let font = UIFont.systemFont(ofSize: 30)
+        var colour = Constants.TextColours.light
+        
+        // Place the labels
+        let labelHeight: CGFloat = 40.0
+        let yPosOffset: CGFloat = 18.0
+        
+        if identifier == "traffic_light_red" {
+            textLayer.backgroundColor = Constants.BoxColours.trafficRed
+        }
+        else if identifier == "traffic_light_green" {
+            textLayer.backgroundColor = Constants.BoxColours.trafficGreen
+            colour = Constants.TextColours.dark
+        }
+        else if identifier == "traffic_light_na" {
+            textLayer.backgroundColor = Constants.BoxColours.trafficNa
+            colour = Constants.TextColours.dark
+        }
+        else if identifier == "stop sign" {
+            textLayer.backgroundColor = Constants.BoxColours.trafficRed
+        }
+        else if identifier == "bicycle" || identifier == "person" {
+            textLayer.backgroundColor = Constants.BoxColours.pedestrian
+        }
+        else {
+            textLayer.backgroundColor = Constants.BoxColours.misc
+        }
+        
+        let attribute = [NSAttributedString.Key.font: font, NSAttributedString.Key.foregroundColor: colour] as [NSAttributedString.Key : Any]
+        let formattedString = NSMutableAttributedString(string: String(format: "\(identifier) (%.2f)", confidence), attributes: attribute)
         textLayer.string = formattedString
-        textLayer.bounds = CGRect(x: 0, y: 0, width: bounds.size.height - 10, height: bounds.size.width - 10)
-        textLayer.position = CGPoint(x: bounds.midX, y: bounds.midY)
-        textLayer.shadowOpacity = 0.7
-        textLayer.shadowOffset = CGSize(width: 2, height: 2)
+        
+        let boxWidth: CGFloat = CGFloat(formattedString.length * 13)
+        textLayer.bounds = CGRect(x: 0, y: 0, width: boxWidth, height: labelHeight)
+        textLayer.position = CGPoint(x: bounds.minX+(boxWidth/2.0), y: bounds.maxY+yPosOffset)
+        
         textLayer.foregroundColor = CGColor(colorSpace: CGColorSpaceCreateDeviceRGB(), components: [0.0, 0.0, 0.0, 1.0])
-        textLayer.contentsScale = 2.0 // retina rendering
-        // rotate the layer into screen orientation and scale and mirror
-        textLayer.setAffineTransform(CGAffineTransform(rotationAngle: CGFloat(.pi / 2.0)).scaledBy(x: 1.0, y: -1.0))
+        textLayer.setAffineTransform(CGAffineTransform(rotationAngle: CGFloat(0)).scaledBy(x: 1.0, y: -1.0))
         return textLayer
     }
+    
     
     // Displays the icons for traffic lights and stop sign in the top right
 //    func showIndicators(label: String) -> CAShapeLayer {

@@ -15,6 +15,7 @@
 		7304864C296E9C6D00196A24 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7304864A296E9C6D00196A24 /* LaunchScreen.storyboard */; };
 		73048654296E9C9D00196A24 /* VisionObjectRecognitionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73048653296E9C9D00196A24 /* VisionObjectRecognitionViewController.swift */; };
 		73048656296E9CB100196A24 /* yolov5sTraffic.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 73048655296E9CB100196A24 /* yolov5sTraffic.mlmodel */; };
+		73953D9F296ECD6F0085AF3D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73953D9E296ECD6F0085AF3D /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		7304864D296E9C6D00196A24 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		73048653296E9C9D00196A24 /* VisionObjectRecognitionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisionObjectRecognitionViewController.swift; sourceTree = "<group>"; };
 		73048655296E9CB100196A24 /* yolov5sTraffic.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = yolov5sTraffic.mlmodel; sourceTree = "<group>"; };
+		73953D9E296ECD6F0085AF3D /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +66,7 @@
 				73048641296E9C6C00196A24 /* SceneDelegate.swift */,
 				73048643296E9C6C00196A24 /* ViewController.swift */,
 				73048653296E9C9D00196A24 /* VisionObjectRecognitionViewController.swift */,
+				73953D9E296ECD6F0085AF3D /* Constants.swift */,
 				73048655296E9CB100196A24 /* yolov5sTraffic.mlmodel */,
 				73048645296E9C6C00196A24 /* Main.storyboard */,
 				73048648296E9C6D00196A24 /* Assets.xcassets */,
@@ -149,6 +152,7 @@
 				73048640296E9C6C00196A24 /* AppDelegate.swift in Sources */,
 				73048642296E9C6C00196A24 /* SceneDelegate.swift in Sources */,
 				73048656296E9CB100196A24 /* yolov5sTraffic.mlmodel in Sources */,
+				73953D9F296ECD6F0085AF3D /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
