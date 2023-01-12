@@ -200,7 +200,7 @@ class VisionObjectRecognitionViewController: ViewController {
         shapeLayer.position = CGPoint(x: bounds.midX, y: bounds.midY)
         shapeLayer.name = "Found Object"
 //        shapeLayer.backgroundColor = CGColor(colorSpace: CGColorSpaceCreateDeviceRGB(), components: [1.0, 1.0, 0.2, 0.4])
-        shapeLayer.borderWidth = 6
+        shapeLayer.borderWidth = 2
         shapeLayer.borderColor = CGColor(red: 33, green: 255, blue: 0, alpha: 1)
         shapeLayer.cornerRadius = 7
         
@@ -252,12 +252,12 @@ class VisionObjectRecognitionViewController: ViewController {
         textLayer.name = "Object Label"
         
         // Format the string
-        let font = UIFont.systemFont(ofSize: 30)
+        let font = UIFont.systemFont(ofSize: 10)
         var colour = Constants.TextColours.light
         
         // Place the labels
-        let labelHeight: CGFloat = 40.0
-        let yPosOffset: CGFloat = 18.0
+        let labelHeight: CGFloat = 10
+        let yPosOffset: CGFloat = 5
         
         if identifier == "traffic_light_red" {
             textLayer.backgroundColor = Constants.BoxColours.trafficRed
@@ -284,7 +284,7 @@ class VisionObjectRecognitionViewController: ViewController {
         let formattedString = NSMutableAttributedString(string: String(format: "\(identifier) (%.2f)", confidence), attributes: attribute)
         textLayer.string = formattedString
         
-        let boxWidth: CGFloat = CGFloat(formattedString.length * 13)
+        let boxWidth: CGFloat = CGFloat(formattedString.length * 5)
         textLayer.bounds = CGRect(x: 0, y: 0, width: boxWidth, height: labelHeight)
         textLayer.position = CGPoint(x: bounds.minX+(boxWidth/2.0), y: bounds.maxY+yPosOffset)
         
