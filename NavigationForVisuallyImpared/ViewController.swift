@@ -8,28 +8,17 @@ import UIKit
 import AVFoundation
 import Vision
 
-class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureDataOutputSynchronizerDelegate {
+class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureDataOutputSynchronizerDelegate
+//                      AVCaptureDataOutputSynchronizerDelegate
+{
+
     
     
     
     func dataOutputSynchronizer(_ synchronizer: AVCaptureDataOutputSynchronizer, didOutput synchronizedDataCollection: AVCaptureSynchronizedDataCollection) {
-        
-        guard let syncedDepthData = synchronizedDataCollection.synchronizedData(for: depthDataOutput) as? AVCaptureSynchronizedDepthData,
-              let syncedVideoData = synchronizedDataCollection.synchronizedData(for: videoDataOutput) as? AVCaptureSynchronizedSampleBufferData else { return }
-        let depthDataMap = syncedDepthData.depthData.depthDataMap
-        CVPixelBufferLockBaseAddress(depthDataMap, CVPixelBufferLockFlags(rawValue: 0))
-        let depthPointer = unsafeBitCast(CVPixelBufferGetBaseAddress(depthDataMap), to: UnsafeMutablePointer<Float32>.self)
-        let point = CGPoint(x: 35,y: 26)
-        let width = CVPixelBufferGetWidth(depthDataMap)
-        let distanceAtXYPoint = depthPointer[Int(point.y * CGFloat(width) + point.x)]
-//        delegate?.onNewData(capturedData: data)
-        print(distanceAtXYPoint)
-        
-//        videoDataOutput.alwaysDiscardsLateVideoFrames = true
-//        videoDataOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)]
-//        videoDataOutput.setSampleBufferDelegate(self, queue: videoDataOutputQueue)
+
     }
-    
+
     
     var bufferSize: CGSize = .zero
     var rootLayer: CALayer! = nil
@@ -37,8 +26,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     @IBOutlet weak private var previewView: UIView!
     private let session = AVCaptureSession()
     private var previewLayer: AVCaptureVideoPreviewLayer! = nil
-    private let videoDataOutput = AVCaptureVideoDataOutput()
-    private var depthDataOutput: AVCaptureDepthDataOutput!
+    let videoDataOutput = AVCaptureVideoDataOutput()
+    var depthDataOutput: AVCaptureDepthDataOutput!
     private var outputVideoSync: AVCaptureDataOutputSynchronizer!
     private let videoDataOutputQueue = DispatchQueue(label: "VideoDataOutput", qos: .userInitiated, attributes: [], autoreleaseFrequency: .workItem)
     
@@ -101,15 +90,12 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             session.addOutput(depthDataOutput)
             outputVideoSync = AVCaptureDataOutputSynchronizer(dataOutputs: [depthDataOutput, videoDataOutput])
             outputVideoSync.setDelegate(self, queue: videoDataOutputQueue)
-    
-            ///////////////// outputVideoSync.setDelegate 하면 물체인식을 안함!!
-            
-            
-            //MARK: - 아래 3줄을 syncData에 넣어보기
+        
             // Add a video data output
-//            videoDataOutput.alwaysDiscardsLateVideoFrames = true
-//            videoDataOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)]
-//            videoDataOutput.setSampleBufferDelegate(self, queue: videoDataOutputQueue)
+            videoDataOutput.alwaysDiscardsLateVideoFrames = true
+            videoDataOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)]
+    //            videoDataOutput.setSampleBufferDelegate(self, queue: videoDataOutputQueue)
+            
         } else {
             print("Could not add video data output to the session")
             session.commitConfiguration()
